@@ -26,3 +26,18 @@ resource "aws_sqs_queue" "default" {
     "everquote:service"     = "example-queue"
   }
 }
+
+resource "aws_sqs_queue" "dead_letter_queue" {
+  name = "atlantis-example-queue-dlq"
+  visibility_timeout_seconds = "30"
+  message_retention_seconds = "345600"
+
+  tags = {
+    "everquote:aws:account" = "distribution-platform"
+    "everquote:category"    = "terraform"
+    "everquote:env"         = "staging"
+    "everquote:heritage"    = "terraform"
+    "everquote:owner"       = "distribution-platform-engineering"
+    "everquote:service"     = "example-queue"
+  }
+}
