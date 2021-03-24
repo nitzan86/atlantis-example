@@ -1,17 +1,22 @@
+provider "aws" {
+  region  = local.region
+  version = "~> 3.14"
+}
+
 resource "null_resource" "example" {
 }
 
 resource "aws_sqs_queue" "default" {
   name = "atlantis-example-queue"
-  visibility_timeout_seconds = var.visibility_timeout_seconds
-  message_retention_seconds = var.message_retention_seconds
-  delay_seconds = var.delay_seconds
+  visibility_timeout_seconds = 30
+  message_retention_seconds = 345600
+  delay_seconds = 0
   receive_wait_time_seconds = 0
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.dead_letter_queue.arn
-    maxReceiveCount     = var.max_attempts
+    maxReceiveCount     = 5
   })
-  fifo_queue = var.sqs_fifo_queue
+  fifo_queue = false
   tags = {
     "everquote:aws:account" = "distribution-platform"
     "everquote:category"    = "terraform"
